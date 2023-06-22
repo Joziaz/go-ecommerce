@@ -7,9 +7,8 @@ import (
 )
 
 type BaseEntity struct {
-	id         uuid.UUID
-	CreatedAt  time.Time `json:"createdAt"`
-	LastUpdate time.Time `json:"LastUpdate"`
+	id        uuid.UUID
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 func (entity BaseEntity) GetId() uuid.UUID {
