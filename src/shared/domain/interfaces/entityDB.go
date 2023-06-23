@@ -2,6 +2,6 @@ package shared
 
 type EntityDB[T Entity] interface {
 	ToEntity() T
-	FromEntity(T) any
+	FromEntity(T) EntityDB[T]
 	TableName() string
 }

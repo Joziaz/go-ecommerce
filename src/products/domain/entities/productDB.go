@@ -1,6 +1,7 @@
 package products
 
 import (
+	interfaces "ecommerce/shared/domain/interfaces"
 	shared "ecommerce/shared/domain/models"
 
 	"github.com/google/uuid"
@@ -31,7 +32,7 @@ func (p *ProductDB) ToEntity() *Product {
 	return &product
 }
 
-func (p *ProductDB) FromEntity(product *Product) any {
+func (p *ProductDB) FromEntity(product *Product) interfaces.EntityDB[*Product] {
 	return &ProductDB{
 		Name:        product.Name,
 		Description: product.Description,
