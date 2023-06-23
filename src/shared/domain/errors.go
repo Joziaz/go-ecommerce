@@ -1,7 +1,14 @@
 package shared
 
-import "errors"
+type DomainError struct {
+	msg string
+}
+
+func (e *DomainError) Error() string {
+	return e.msg
+}
 
 var (
-	ErrNotFound = errors.New("not found")
+	ErrNotFound     = &DomainError{"not found"}
+	ErrAlreadyExist = &DomainError{"alredy exist a item with that key"}
 )

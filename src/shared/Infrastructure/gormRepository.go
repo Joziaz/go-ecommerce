@@ -1,7 +1,9 @@
 package shared
 
 import (
+	domainErrors "ecommerce/shared/domain"
 	shared "ecommerce/shared/domain/interfaces"
+	"errors"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -37,13 +39,20 @@ func (repo GormRepository[T, K]) GetById(id uuid.UUID) (T, error) {
 	return entity.ToEntity(), nil
 }
 
-func (repo GormRepository[T, K]) Save(entity T) T {
+func (repo GormRepository[T, K]) Save(entity T) (T, error) {
 	var entityDb K
 	entityDb = entityDb.FromEntity(entity).(K)
 
-	repo.db.Create(entityDb)
+	result := repo.db.Create(entityDb)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
+			return entity, domainErrors.ErrAlreadyExist
+		}
 
-	return entity
+		return entity, result.Error
+	}
+
+	return entity, nil
 }
 
 func (repo GormRepository[T, K]) Update(entity T) error {

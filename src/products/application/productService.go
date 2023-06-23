@@ -15,7 +15,7 @@ func NewProductService(repo shared.Repository[*products.Product]) *ProductServic
 	return &ProductService{repo}
 }
 
-func (service *ProductService) Save(product products.Product) *products.Product {
+func (service *ProductService) Save(product products.Product) (*products.Product, error) {
 	return service.productRepository.Save(&product)
 }
 

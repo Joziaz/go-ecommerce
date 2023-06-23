@@ -62,7 +62,11 @@ func (controller *ProductController) SaveProduct(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "product price must be bigger than 0"})
 	}
 
-	savedProduct := controller.productService.Save(product)
+	savedProduct, err := controller.productService.Save(product)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+	}
+
 	dto := NewGetProductDto(*savedProduct)
 	ctx.JSON(http.StatusCreated, dto)
 }
@@ -73,6 +77,7 @@ func (controller *ProductController) Update(ctx *gin.Context) {
 	err := controller.productService.Update(product)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
 	}
 }
 
@@ -83,6 +88,7 @@ func (controller *ProductController) Delete(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "invalid id",
 		})
+		return
 	}
 
 	err = controller.productService.Delete(id)
