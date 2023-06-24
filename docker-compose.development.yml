@@ -9,6 +9,6 @@ services:
     environment:
       - POSTGRES_USER=josias
       - POSTGRES_PASSWORD=josias1228
-      - POSTGRES_DB=ecommerce
+      - POSTGRES_DB=ecommerce-GPT
     ports:
       - 5432:5432
