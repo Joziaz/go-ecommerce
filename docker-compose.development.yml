@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  db:
+    image: "postgres:alpine"
+    restart: always
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_USER=josias
+      - POSTGRES_PASSWORD=josias1228
+      - POSTGRES_DB=ecommerce
+    ports:
+      - 5432:5432
