@@ -9,6 +9,6 @@ func (e *DomainError) Error() string {
 }
 
 var (
-	ErrNotFound     = &DomainError{"not found"}
-	ErrAlreadyExist = &DomainError{"alredy exist a item with that key"}
+	ErrNotFound      = &DomainError{"not found"}
+	ErrDuplicatedKey = &DomainError{"duplicated key not allowed"}
 )

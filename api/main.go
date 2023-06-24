@@ -15,7 +15,7 @@ import (
 func main() {
 	router := gin.Default()
 	dsn := "host=localhost user=josias password=josias1228 dbname=ecommerce-GPT port=5432 sslmode=disable TimeZone=America/Santo_Domingo"
-	gormDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	gormDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{TranslateError: true})
 	if err != nil {
 		panic(fmt.Errorf("error connecting to the database %s", err.Error()))
 	}

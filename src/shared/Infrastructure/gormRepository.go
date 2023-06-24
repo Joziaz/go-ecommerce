@@ -46,7 +46,7 @@ func (repo GormRepository[T, K]) Save(entity T) (T, error) {
 	result := repo.db.Create(entityDb)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
-			return entity, domainErrors.ErrAlreadyExist
+			return entity, domainErrors.ErrDuplicatedKey
 		}
 
 		return entity, result.Error
