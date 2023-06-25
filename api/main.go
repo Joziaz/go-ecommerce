@@ -2,6 +2,7 @@ package main
 
 import (
 	"ecommerce/api/controllers"
+	"ecommerce/api/middlewares"
 	services "ecommerce/products/application"
 	products "ecommerce/products/domain/entities"
 	shared "ecommerce/shared/Infrastructure"
@@ -13,7 +14,6 @@ import (
 )
 
 func main() {
-	router := gin.Default()
 	dsn := "host=localhost user=josias password=josias1228 dbname=ecommerce-GPT port=5432 sslmode=disable TimeZone=America/Santo_Domingo"
 	gormDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{TranslateError: true})
 	if err != nil {
@@ -25,6 +25,10 @@ func main() {
 	productService := services.NewProductService(&productRepository)
 	productController := controllers.NewProductController(*productService)
 
+	router := gin.Default()
+	router.Use(
+		middlewares.ErrorHandler(),
+	)
 	productsRoute := router.Group("products")
 	{
 		productsRoute.GET("/", productController.GetAll)
