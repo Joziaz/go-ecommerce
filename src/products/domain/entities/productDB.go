@@ -18,7 +18,7 @@ func (p ProductDB) TableName() string {
 	return "products"
 }
 
-func (p *ProductDB) ToEntity() *Product {
+func (p ProductDB) ToEntity() *Product {
 	product := Product{
 		BaseEntity: shared.BaseEntity{
 			CreatedAt: p.CreatedAt,
@@ -32,13 +32,16 @@ func (p *ProductDB) ToEntity() *Product {
 	return &product
 }
 
-func (p *ProductDB) FromEntity(product *Product) interfaces.EntityDB[*Product] {
-	return &ProductDB{
+func (p ProductDB) FromEntity(product *Product) interfaces.EntityDB[*Product] {
+	productDb := ProductDB{
 		Name:        product.Name,
 		Description: product.Description,
 		Price:       product.Price,
-		GormModel: shared.GormModel{
-			ID: product.GetId().String(),
-		},
 	}
+
+	if product.GetId() != uuid.Nil {
+		productDb.ID = product.GetId().String()
+	}
+
+	return productDb
 }
