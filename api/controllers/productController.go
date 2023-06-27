@@ -76,7 +76,7 @@ func (controller *ProductController) SaveProduct(ctx *gin.Context) {
 }
 
 func (controller *ProductController) Update(ctx *gin.Context) {
-	var productDto = SaveProductDto{}
+	var productDto = UpdateProductDto{}
 	ctx.BindJSON(&productDto)
 
 	errs := productDto.Validate()
@@ -86,7 +86,8 @@ func (controller *ProductController) Update(ctx *gin.Context) {
 		}
 	}
 
-	err := controller.productService.Update(productDto.ToProduct())
+	product, _ := productDto.ToProduct()
+	err := controller.productService.Update(product)
 	if err != nil {
 		ctx.Error(err)
 		return
