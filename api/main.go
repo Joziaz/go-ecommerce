@@ -24,7 +24,7 @@ func main() {
 		panic(fmt.Errorf("error making the migrations %s", err.Error()))
 	}
 
-	productRepository := shared.NewGormRepository[*products.Product, *products.ProductDB](gormDB)
+	productRepository := shared.NewGormRepository[*products.Product, products.ProductDB](gormDB)
 	productService := services.NewProductService(&productRepository)
 	productController := controllers.NewProductController(*productService)
 

@@ -43,7 +43,7 @@ func (repo GormRepository[T, K]) Save(entity T) (T, error) {
 	var entityDb K
 	entityDb = entityDb.FromEntity(entity).(K)
 
-	result := repo.db.Create(entityDb)
+	result := repo.db.Create(&entityDb)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
 			return entity, domainErrors.ErrDuplicatedKey
@@ -52,7 +52,7 @@ func (repo GormRepository[T, K]) Save(entity T) (T, error) {
 		return entity, result.Error
 	}
 
-	return entity, nil
+	return entityDb.ToEntity(), nil
 }
 
 func (repo GormRepository[T, K]) Update(entity T) error {
@@ -70,7 +70,12 @@ func (repo GormRepository[T, K]) Update(entity T) error {
 
 func (repo GormRepository[T, K]) Delete(id uuid.UUID) error {
 	var entity K
-	result := repo.db.Delete(&entity, id.String())
+	result := repo.db.Delete(&entity, "id = ?", id.String())
+
+	if result.RowsAffected == 0 {
+		return domainErrors.ErrNotFound
+	}
+
 	if result.Error != nil {
 		return result.Error
 	}
