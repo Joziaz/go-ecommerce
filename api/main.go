@@ -19,7 +19,10 @@ func main() {
 	if err != nil {
 		panic(fmt.Errorf("error connecting to the database %s", err.Error()))
 	}
-	gormDB.AutoMigrate(&products.ProductDB{})
+	err = gormDB.AutoMigrate(&products.ProductDB{})
+	if err != nil {
+		panic(fmt.Errorf("error making the migrations %s", err.Error()))
+	}
 
 	productRepository := shared.NewGormRepository[*products.Product, *products.ProductDB](gormDB)
 	productService := services.NewProductService(&productRepository)
